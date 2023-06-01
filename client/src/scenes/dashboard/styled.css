@@ -1,0 +1,34 @@
+
+.show__data{
+    /* margin-top: 10px; */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.users{
+    width: 150px;
+    height: 50px;
+    background: rgb(184, 68, 68);
+}
+.chart{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.line_chart{
+    width: 607px;
+    height: 250px;
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user_data{
+    margin-left: 200px;
+    margin-top: 40px;
+}

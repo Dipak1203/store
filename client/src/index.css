@@ -1,0 +1,57 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main__content{
+    position: absolute;
+    top: 0;
+    /* left: 10px; */
+    right: 1px;
+    width: 87vw;
+    text-align: center;
+    height: 100vh;
+}
+
+button{
+    border: none;
+    background: #25ceaa;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 7px;
+    transition: all ease-in-out 0.5s;
+}
+
+button a{
+    color: #fff;
+}
+
+button:hover{
+    background: #26c09e;
+    transition: all ease-in-out 0.5s;
+}
+
+input{
+    outline: none;
+}
+
+textarea{
+    outline: none;
+}
+
+select{
+    padding: 10px;
+    cursor: pointer;
+    outline: none;
+}
+
+table{
+    padding: 10px;
+}
+
+tr{
+    padding: 10px;
+}

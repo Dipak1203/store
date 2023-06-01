@@ -1,0 +1,59 @@
+.sidebar {
+    background: #25ceaa;
+    width: 153px;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+}
+h1{
+    margin-bottom: 10px;
+}
+h1 a {
+    color: red;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: 25px;
+    border-bottom: 3px solid red;
+}
+
+ul li {
+    width: 100%;
+    list-style: none;
+    font-size: 20px;
+    padding: 5px 15px;
+    margin-bottom: 15px;
+    transition: .3s ease-in-out;
+}
+
+ul li:hover a{
+    background-color: red;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+}
+
+ul li:hover{
+    background-color: red;
+    cursor: pointer;
+    border-radius: 10px;
+    color: #fff;
+    transition: .3s ease-in-out;
+}
+ul li a:hover{
+    color: #fff;
+    transition: .3s ease-in-out;
+}
+ul li a{
+    color: #fff;
+    text-decoration: none;
+    transition: .3s ease-in-out;
+}
+
+.sideBar__content{
+    margin-left: -10px;
+}

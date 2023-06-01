@@ -1,0 +1,20 @@
+.create{
+    margin: 0px;
+    display: flex;
+    justify-content: end;
+    margin-right: 149px;
+    margin-top: 54px;
+    gap: 20px;
+}
+button{
+    border: none;
+    padding: 10px;
+}
+button a{
+    border: none;
+    text-decoration: none;
+    color: #fff;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 500;
+}

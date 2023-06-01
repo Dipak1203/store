@@ -1,0 +1,52 @@
+
+.product{
+    position: absolute;
+    top: 0;
+    left: 130;
+    margin-top: 80px;
+    height: 80vh;
+}
+
+form{
+    display: flex;
+}
+
+.name{
+    display: flex;
+    flex-direction: column;
+    margin-left: 350px;
+}
+
+input{
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 20px 10px;
+    background: #dfdfdf;
+    border: none;
+    border-radius: 1;
+    border-radius: 10px 10px 3px 3px
+}
+button{
+    border: none;
+    background: #25ceaa;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 7px;
+    transition: all ease-in-out 0.5s;
+}
+
+button:hover{
+    background: #26c09e;
+    transition: all ease-in-out 0.5s;
+}
+
+.name2{
+    display: flex;
+    gap: 10px;
+}
+
+.name2 input{
+    width: 100%;
+}
