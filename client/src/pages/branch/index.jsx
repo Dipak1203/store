@@ -1,22 +1,24 @@
-
-
-// import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-// import { useDemoData } from '@mui/x-data-grid-generator';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import axios from 'axios';
-import { NavLink } from 'react-router-dom';
-import Table from 'react-bootstrap/Table';
-
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import Table from "react-bootstrap/Table";
+import "../style.css";
 
 const Branch = () => {
-  const [branch, setBranch] = useState('');
-  const [data,setData] = useState([]);
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [branch, setBranch] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const handleChange = (e) => {
     setBranch(e.target.value);
-  }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to the first page when searching
+  };
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -25,75 +27,104 @@ const Branch = () => {
       return;
     }
 
-    const res = await fetch('http://localhost:8000/branch/create', {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({branch})
-    });
-    
-    if (res.ok) {
-      alert("नयाँ शखा सिर्जना गरियो");
-      setBranch("")
-      window.location.reload(true)
-    } else {
-      const errorData = await res.json(); // Extract the error message from the response
-      alert(`Error: ${errorData.message}`);
+    try {
+      const res = await fetch("http://localhost:8000/branch/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ branch }),
+      });
+
+      if (res.ok) {
+        alert("नयाँ branch सिर्जना गरियो");
+        setBranch("");
+        window.location.reload(true);
+      } else {
+        const errorData = await res.json(); // Extract the error message from the response
+        alert(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
-  const handleDelete = async(id,wada) =>{
-    const confirmed = window.confirm(`पक्का चाहनु हुन्छ ${wada} हताउन `);
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/branch");
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    if(confirmed){
+  const handleDelete = async (id, branch) => {
+    const confirmed = window.confirm(`पक्का चाहनु हुन्छ ${branch} हताउन `);
+
+    if (confirmed) {
       try {
         const res = await axios.delete(`http://localhost:8000/branch/delete/${id}`);
-        if(res){
-          alert(`${wada} हेटयो`);
-          window.location = '/branch'
+        if (res) {
+          alert(`${branch} हेटयो`);
+          window.location = "/branch";
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
-  }
+  };
 
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-    // Pagination
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-  
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Apply search filter to data
+  const filteredData = data.filter((item) =>
+    item.branch.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const fetchData = async() =>{
-    const res = await axios.get("http://localhost:8000/branch");
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-    setData(res.data)
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  }
-  useEffect(() =>{
+  useEffect(() => {
     fetchData();
-  })
+  }, []);
+
   return (
-    <div className='main__content'>
-      <h1 className='text-center'> नयाँ शखा थप्नुहोस् </h1>
-      <div className='create'>  <input placeholder=' नयाँ शखा थप्नुहोस्' name='branch' value={branch} onChange={handleChange} />
-        <button type='submit' onClick={handleClick}>
+    <div className="main__content">
+      <h1 className="text-center"> नयाँ प्रकार थप्नुहोस् </h1>
+      <div className="create">
+        <input
+          placeholder=" नयाँ प्रकार थप्नुहोस्"
+          name="branch"
+          value={branch}
+          onChange={handleChange}
+        />
+        <button type="submit" onClick={handleClick}>
           थप्नुहोस्
         </button>
       </div>
 
-      <div style={{ height: 400, width: "40%", marginTop: '20px' }}>
-      <Table striped bordered hover style={{marginLeft:"60%"}} className='p-5'>
+      <div className="search mt-3">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search"
+        />
+      </div>
+
+      <div className="table-container">
+        <Table striped bordered hover className="branch-table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Branch</th>
+              <th>branch</th>
               <th colSpan={2}>Action</th>
             </tr>
           </thead>
           <tbody>
-          {currentItems.map(({ id, branch }, index) => {
+            {currentItems.map(({ id, branch }, index) => {
               const num = indexOfFirstItem + index + 1;
               return (
                 <tr key={id}>
@@ -115,10 +146,11 @@ const Branch = () => {
           </tbody>
         </Table>
       </div>
-      {data.length > itemsPerPage && (
+
+      {filteredData.length > itemsPerPage && (
         <div className="pagination-container">
           <ul className="pagination">
-            {Array.from({ length: Math.ceil(data.length / itemsPerPage) }).map((_, index) => (
+            {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }).map((_, index) => (
               <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
                 <button className="page-link" onClick={() => paginate(index + 1)}>
                   {index + 1}
@@ -129,7 +161,7 @@ const Branch = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Branch
+export default Branch;
