@@ -32,6 +32,7 @@ const Category = () => {
     if (res.ok) {
       alert("नयाँ श्रेणी सिर्जना गरियो");
       setCategory("");
+      window.location.reload(true)
     } else {
       const errorData = await res.json(); // Extract the error message from the response
       alert(`Error: ${errorData.message}`);
@@ -78,8 +79,8 @@ const Category = () => {
         </button>
       </div>
 
-      <div style={{ height: 400, width: "100", marginTop: "20px" }}>
-        <Table striped bordered hover>
+      <div style={{ height: 400, width: "40%", marginTop: "20px" }}>
+        <Table striped bordered hover style={{marginLeft:"60%"}} className='p-5'>
           <thead>
             <tr>
               <th>ID</th>
