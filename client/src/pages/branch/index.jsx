@@ -6,6 +6,9 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
+import Table from 'react-bootstrap/Table';
+
+
 const Branch = () => {
   const [branch, setBranch] = useState('');
   const [data,setData] = useState([])
@@ -70,28 +73,36 @@ const Branch = () => {
       </div>
 
       <div style={{ height: 400, width: '100', marginTop: '20px' }}>
-      <table border="1px">
-          <tr className='p-5'>
-            <th>ID</th>
-            <th>साखा </th>
-            <th colSpan="2">Action</th>
-          </tr>
-          {
-            data.map(({ id, branch }) => {
+      <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Branch</th>
+              <th colSpan={2}>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map(({ id, branch }, index) => {
+              const num = index + 1;
               return (
                 <tr key={id}>
-                  <td>{id}</td>
+                  <td>{num}</td>
                   <td>{branch}</td>
-                  <td><NavLink to={`/branch/update/${id}`}>Edit</NavLink></td>
-                  <td><button onClick={() => handleDelete(id,branch)}>Delete</button></td>
+                  <td>
+                    <NavLink to={`/branch/update/${id}`}>
+                      <button>Edit</button>
+                    </NavLink>
+                  </td>
+                  <td>
+                    <button onClick={() => handleDelete(id, branch)}>
+                      Delete
+                    </button>
+                  </td>
                 </tr>
-
-              )
-            })
-          }
-
-        </table>
-
+              );
+            })}
+          </tbody>
+        </Table>
       </div>
     </div>
   )
