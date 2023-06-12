@@ -3,7 +3,7 @@ import { Col } from "react-bootstrap";
 const DashboardCard = ({heading,num,link,icon,color}) => {
     const cardStyle = {borderLeft:'5px solid',borderColor:color  };    
   return (
-      <Col md="3" className="shadow-lg py-2" 
+      <Col md="2" className="shadow-lg" 
        style={cardStyle}
       >
         <div className="customers">

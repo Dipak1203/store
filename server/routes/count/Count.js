@@ -17,7 +17,7 @@ countRouter.get("/users",async(req,res) =>{
     await CountController.count(req,res,"users");
 });
 countRouter.get("/product",async(req,res) =>{
-    await CountController.count(req,res,"product");
+    await CountController.count(req,res,"products");
 });
 
 

@@ -6,7 +6,7 @@ const CountController = {
             const countQr = `SELECT COUNT(id) FROM ${table}`;
             db.query(countQr,(err,result) =>{
                 if(err) throw err;
-                res.json({result})
+                res.status(201).json({message:"fetched",result})
             })
         } catch (error) {
             res.status(501).json({messsage:"internal server error",error})

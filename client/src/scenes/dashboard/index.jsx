@@ -6,6 +6,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import MoneyOffIcon from "@mui/icons-material/MoneyOff";
 import DashboardCard from "./DashboardCard";
+import axios from 'axios'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -88,6 +89,11 @@ const Dashboard = () => {
   //   setCurrentPage(newPage);
   // };
 
+  const [wada,setWada] = useState();
+  const [users,setUsers] = useState();
+  const [category,setCategory] = useState();
+  const [branch,setBranch] = useState();
+  const [product,setProduct] = useState();
 
 
   useEffect(() => {
@@ -97,59 +103,113 @@ const Dashboard = () => {
     };
   }, []);
 
+  
+  const getWadaCount = async() =>{
+      const res = await axios.get("http://localhost:8000/count/wada");
+      const count = Object.values(res.data.result[0])[0];
+      if(res){
+        setWada(count)
+      }else{
+        console.log(res);
+      }
+  }
+  const getCategoryCount = async() =>{
+      const res = await axios.get("http://localhost:8000/count/category");
+      const count = Object.values(res.data.result[0])[0];
+      if(res){
+        setCategory(count)
+      }else{
+        console.log(res);
+      }
+  }
+  const getBranchCount = async() =>{
+      const res = await axios.get("http://localhost:8000/count/branch");
+      const count = Object.values(res.data.result[0])[0];
+      if(res){
+        setBranch(count)
+      }else{
+        console.log(res);
+      }
+  }
+  const getUsersCount = async() =>{
+      const res = await axios.get("http://localhost:8000/count/users");
+      const count = Object.values(res.data.result[0])[0];
+      if(res){
+        setUsers(count)
+      }else{
+        console.log(res);
+      }
+  }
+  const getProductCount = async() =>{
+      const res = await axios.get("http://localhost:8000/count/product");
+      const count = Object.values(res.data.result[0])[0];
+      if(res){
+        setProduct(count)
+      }else{
+        console.log(res);
+      }
+  }
+
+  useEffect(() =>{
+    getWadaCount();
+    getProductCount();
+    getUsersCount();
+    getBranchCount();
+    getCategoryCount();
+  },[])
 
   return (
     <div className="main__content">
       <Container>
-        <Row style={{cursor:"pointer"}} className="gap-4">
+        <div style={{cursor:"pointer",display:"flex",justifyContent:"center",alignItems:"center",gap:'135px'}} className="">
           <DashboardCard
             heading="वडा"
-            num={203}
-            link="/customer"
+            num={wada}
+            link="/wada"
             icon={<GroupsIcon />}
             color="text-danger"
           />
           <DashboardCard
             heading="प्रकार"
-            num={140}
-            link="/customer"
+            num={category}
+            link="/category"
             icon={<ShoppingBasketIcon />}
             color="text-dark"
           />
           <DashboardCard
             heading="साखा"
-            num={"$50343"}
-            link="/customer"
+            num={branch}
+            link="/branch"
             icon={<MoneyOffIcon />}
             color="text-primary"
           />
-        </Row>
-        <Row style={{cursor:"pointer"}} className="gap-4 mt-5">
-          <DashboardCard
+           <DashboardCard
             heading="प्रयोगकर्ता"
-            num={203}
-            link="/customer"
+            num={users}
+            link="/users"
             icon={<GroupsIcon />}
             color="text-danger"
           />
+        </div>
+        <Row style={{cursor:"pointer"}} className="gap-4 mt-5">
           <DashboardCard
             heading="सर समान "
-            num={140}
-            link="/customer"
+            num={product}
+            link="/product"
             icon={<ShoppingBasketIcon />}
             color="text-dark"
           />
         </Row>
       </Container>
 
-      <div className="chart">
+      {/* <div className="chart">
         <div className="line_chart">
           <Line options={options} data={chartData} />
         </div>
         <div className="line_chart">
           <Pie data={chartData} />
         </div>
-      </div>
+      </div> */}
 
       {/* <section className="user_data">
         <div style={{ height: 400, width: '50%' }}>
