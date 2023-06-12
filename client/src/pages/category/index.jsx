@@ -1,11 +1,10 @@
 
 
 import { useState } from 'react';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
 import { useEffect } from 'react';
 import axios from 'axios'
 import {NavLink} from 'react-router-dom'
+import Table from 'react-bootstrap/Table';
 const Category = () => {
   // const { data } = useDemoData({
   //   dataSet: 'Commodity',
@@ -75,27 +74,32 @@ const Category = () => {
       </div>
 
       <div style={{ height: 400, width: '100', marginTop: '20px' }}>
-      <table>
-          <tr className='p-5'>
-            <th>ID</th>
-            <th>प्रकार </th>
-            <th colSpan="2">Action</th>
-          </tr>
-      {
+      <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category</th>
+          <th colSpan={2}>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+          {
             data.map(({ id, category },index) => {
-              const series = index+1
+              const num = index+ 1;
               return (
                 <tr key={id}>
-                  <td>{series}</td>
+                  <td>{num}</td>
                   <td>{category}</td>
-                  <td><NavLink to={`/category/update/${id}`}>Edit</NavLink></td>
+                  <td><NavLink to={`/category/update/${id}`}><button>Edit</button></NavLink></td>
                   <td><button onClick={() => handleDelete(id,category)}>Delete</button></td>
                 </tr>
 
               )
             })
           }
-        </table>
+      </tbody>
+      </Table>
+
       </div>
     </div>
   )
