@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { useEffect } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Table from "react-bootstrap/Table";
-import '../style.css';
+import "../style.css";
+
 const Category = () => {
-  const [category, setCategory] = useState("");
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [category, setCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const handleChange = (e) => {
     setCategory(e.target.value);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to the first page when searching
   };
 
   const handleClick = async (e) => {
@@ -20,32 +27,44 @@ const Category = () => {
       return;
     }
 
-    const res = await fetch("http://localhost:8000/category/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ category }),
-    });
+    try {
+      const res = await fetch("http://localhost:8000/category/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ category }),
+      });
 
-    if (res.ok) {
-      alert("नयाँ श्रेणी सिर्जना गरियो");
-      setCategory("");
-      window.location.reload(true)
-    } else {
-      const errorData = await res.json(); // Extract the error message from the response
-      alert(`Error: ${errorData.message}`);
+      if (res.ok) {
+        alert("नयाँ वडा सिर्जना गरियो");
+        setCategory("");
+        window.location.reload(true);
+      } else {
+        const errorData = await res.json(); // Extract the error message from the response
+        alert(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
-  const handleDelete = async (id, wada) => {
-    const confirmed = window.confirm(`पक्का चाहनु हुन्छ ${wada} हताउन `);
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/category");
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async (id, category) => {
+    const confirmed = window.confirm(`पक्का चाहनु हुन्छ ${category} हताउन `);
 
     if (confirmed) {
       try {
-        const res = await axios.delete(
-          `http://localhost:8000/category/delete/${id}`
-        );
+        const res = await axios.delete(`http://localhost:8000/category/delete/${id}`);
         if (res) {
-          alert(`${wada} हेटयो`);
-          window.location = "/wada";
+          alert(`${category} हेटयो`);
+          window.location = "/category";
         }
       } catch (error) {
         console.log(error);
@@ -53,29 +72,29 @@ const Category = () => {
     }
   };
 
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-    // Pagination
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-  
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Apply search filter to data
+  const filteredData = data.filter((item) =>
+    item.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const fetchData = async () => {
-    const res = await axios.get("http://localhost:8000/category");
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-    setData(res.data);
-  };
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <div className="main__content">
-      <h1 className="text-center"> नयाँ श्रेणी थप्नुहोस् </h1>
+      <h1 className="text-center"> नयाँ प्रकार थप्नुहोस् </h1>
       <div className="create">
-        {" "}
         <input
-          placeholder=" नयाँ श्रेणी थप्नुहोस्"
+          placeholder=" नयाँ प्रकार थप्नुहोस्"
           name="category"
           value={category}
           onChange={handleChange}
@@ -85,17 +104,27 @@ const Category = () => {
         </button>
       </div>
 
-      <div style={{ height: 400, width: "40%", marginTop: "20px" }}>
-        <Table striped bordered hover style={{marginLeft:"60%"}} className='p-5'>
+      <div className="search mt-3">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search"
+        />
+      </div>
+
+      <div className="table-container">
+        <Table striped bordered hover className="category-table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Category</th>
+              <th>category</th>
               <th colSpan={2}>Action</th>
             </tr>
           </thead>
           <tbody>
-          {currentItems.map(({ id, category }, index) => {
+            {currentItems.map(({ id, category }, index) => {
               const num = indexOfFirstItem + index + 1;
               return (
                 <tr key={id}>
@@ -117,10 +146,11 @@ const Category = () => {
           </tbody>
         </Table>
       </div>
-      {data.length > itemsPerPage && (
+
+      {filteredData.length > itemsPerPage && (
         <div className="pagination-container">
           <ul className="pagination">
-            {Array.from({ length: Math.ceil(data.length / itemsPerPage) }).map((_, index) => (
+            {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }).map((_, index) => (
               <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
                 <button className="page-link" onClick={() => paginate(index + 1)}>
                   {index + 1}
