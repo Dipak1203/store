@@ -44,10 +44,10 @@ const Branch = () => {
 
     if(confirmed){
       try {
-        const res = await axios.delete(`http://localhost:8000/category/delete/${id}`);
+        const res = await axios.delete(`http://localhost:8000/branch/delete/${id}`);
         if(res){
           alert(`${wada} हेटयो`);
-          window.location = '/wada'
+          window.location = '/branch'
         }
       } catch (error) {
         console.log(error)
