@@ -11,6 +11,7 @@ import categoryClient from './routes/pages/category.js';
 import branchClient from './routes/pages/branch.js';
 import Auth from './routes/auth/Auth.js';
 import usersClient from './routes/users.js';
+import countRouter from './routes/count/Count.js';
 dotenv.config();
 
 
@@ -39,7 +40,8 @@ app.use('/wada',wadaClient)
 app.use('/category',categoryClient)
 app.use('/branch',branchClient)
 app.use('/',Auth)
-app.use('/users',usersClient)
+app.use('/users',usersClient);
+app.use('/count',countRouter)
 
 const port = process.env.SERVER_PORT || 5000;
 app.listen(port,() =>{

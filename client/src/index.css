@@ -1,7 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish&display=swap');
+
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Mulish', sans-serif;
 }
 
 .main__content{
@@ -16,7 +20,7 @@
 
 button{
     border: none;
-    background: #25ceaa;
+    background: #3496d7;
     color: #fff;
     font-size: 18px;
     font-weight: 800;

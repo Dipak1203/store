@@ -35,7 +35,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <h1>
+      <h1 className=''>
         <NavLink to="/">SobizPress</NavLink>
       </h1>
       <ul className="sideBar__content">
