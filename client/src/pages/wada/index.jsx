@@ -9,9 +9,15 @@ const Wada = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
   const [wada, setWada] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleChange = (e) => {
     setWada(e.target.value);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to the first page when searching
   };
 
   const handleClick = async (e) => {
@@ -69,7 +75,13 @@ const Wada = () => {
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Apply search filter to data
+  const filteredData = data.filter((item) =>
+    item.wada.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -82,7 +94,7 @@ const Wada = () => {
       <h1 className="text-center"> नयाँ वडा थप्नुहोस् </h1>
       <div className="create">
         <input
-          placeholder=" नयाँ श्रेणी थप्नुहोस्"
+          placeholder=" नयाँ वडा थप्नुहोस्"
           name="category"
           value={wada}
           onChange={handleChange}
@@ -92,8 +104,18 @@ const Wada = () => {
         </button>
       </div>
 
+      <div className="search mt-3">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search"
+        />
+      </div>
+
       <div className="table-container">
-        <Table striped bordered hover className="mt-5">
+        <Table striped bordered hover className="wada-table">
           <thead>
             <tr>
               <th>ID</th>
@@ -125,10 +147,10 @@ const Wada = () => {
         </Table>
       </div>
 
-      {data.length > itemsPerPage && (
+      {filteredData.length > itemsPerPage && (
         <div className="pagination-container">
           <ul className="pagination">
-            {Array.from({ length: Math.ceil(data.length / itemsPerPage) }).map((_, index) => (
+            {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }).map((_, index) => (
               <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
                 <button className="page-link" onClick={() => paginate(index + 1)}>
                   {index + 1}

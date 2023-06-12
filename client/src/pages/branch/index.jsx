@@ -11,7 +11,9 @@ import Table from 'react-bootstrap/Table';
 
 const Branch = () => {
   const [branch, setBranch] = useState('');
-  const [data,setData] = useState([])
+  const [data,setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
   const handleChange = (e) => {
     setBranch(e.target.value);
   }
@@ -55,6 +57,14 @@ const Branch = () => {
     }
   }
 
+
+    // Pagination
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const fetchData = async() =>{
     const res = await axios.get("http://localhost:8000/branch");
 
@@ -83,19 +93,19 @@ const Branch = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map(({ id, branch }, index) => {
-              const num = index + 1;
+          {currentItems.map(({ id, branch }, index) => {
+              const num = indexOfFirstItem + index + 1;
               return (
                 <tr key={id}>
                   <td>{num}</td>
                   <td>{branch}</td>
                   <td>
                     <NavLink to={`/branch/update/${id}`}>
-                      <button>Edit</button>
+                      <button className="edit-button">Edit</button>
                     </NavLink>
                   </td>
                   <td>
-                    <button onClick={() => handleDelete(id, branch)}>
+                    <button className="delete-button" onClick={() => handleDelete(id, branch)}>
                       Delete
                     </button>
                   </td>
@@ -105,6 +115,19 @@ const Branch = () => {
           </tbody>
         </Table>
       </div>
+      {data.length > itemsPerPage && (
+        <div className="pagination-container">
+          <ul className="pagination">
+            {Array.from({ length: Math.ceil(data.length / itemsPerPage) }).map((_, index) => (
+              <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => paginate(index + 1)}>
+                  {index + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }
