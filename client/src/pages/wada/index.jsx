@@ -1,15 +1,17 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Table from "react-bootstrap/Table";
+import "../style.css";
 
 const Wada = () => {
   const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
   const [wada, setWada] = useState("");
+
   const handleChange = (e) => {
     setWada(e.target.value);
-    setUpdateWada(e.target.value);
   };
 
   const handleClick = async (e) => {
@@ -19,37 +21,41 @@ const Wada = () => {
       return;
     }
 
-    const res = await fetch("http://localhost:8000/wada/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ wada }),
-    });
+    try {
+      const res = await fetch("http://localhost:8000/wada/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wada }),
+      });
 
-    if (res.ok) {
-      alert("नयाँ वडा सिर्जना गरियो");
-      setWada("");
-      window.location.reload(true)
-    } else {
-      const errorData = await res.json(); // Extract the error message from the response
-      alert(`Error: ${errorData.message}`);
+      if (res.ok) {
+        alert("नयाँ वडा सिर्जना गरियो");
+        setWada("");
+        window.location.reload(true);
+      } else {
+        const errorData = await res.json(); // Extract the error message from the response
+        alert(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:8000/wada");
-    setData(res.data);
+    try {
+      const res = await axios.get("http://localhost:8000/wada");
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  // for delete
 
   const handleDelete = async (id, wada) => {
     const confirmed = window.confirm(`पक्का चाहनु हुन्छ ${wada} हताउन `);
 
     if (confirmed) {
       try {
-        const res = await axios.delete(
-          `http://localhost:8000/wada/delete/${id}`
-        );
+        const res = await axios.delete(`http://localhost:8000/wada/delete/${id}`);
         if (res) {
           alert(`${wada} हेटयो`);
           window.location = "/wada";
@@ -60,6 +66,12 @@ const Wada = () => {
     }
   };
 
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
     fetchData();
@@ -80,14 +92,8 @@ const Wada = () => {
         </button>
       </div>
 
-      <div style={{ height: 400, width: "40%", marginTop: "20px" }}>
-        <Table
-          striped
-          bordered
-          hover
-          style={{ marginLeft: "60%" }}
-          className="p-5"
-        >
+      <div className="table-container">
+        <Table striped bordered hover className="mt-5">
           <thead>
             <tr>
               <th>ID</th>
@@ -96,19 +102,19 @@ const Wada = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map(({ id, wada }, index) => {
-              const num = index + 1;
+            {currentItems.map(({ id, wada }, index) => {
+              const num = indexOfFirstItem + index + 1;
               return (
                 <tr key={id}>
                   <td>{num}</td>
                   <td>{wada}</td>
                   <td>
                     <NavLink to={`/wada/update/${id}`}>
-                      <button>Edit</button>
+                      <button className="edit-button">Edit</button>
                     </NavLink>
                   </td>
                   <td>
-                  <button onClick={() => handleDelete(id, wada)}>
+                    <button className="delete-button" onClick={() => handleDelete(id, wada)}>
                       Delete
                     </button>
                   </td>
@@ -118,6 +124,20 @@ const Wada = () => {
           </tbody>
         </Table>
       </div>
+
+      {data.length > itemsPerPage && (
+        <div className="pagination-container">
+          <ul className="pagination">
+            {Array.from({ length: Math.ceil(data.length / itemsPerPage) }).map((_, index) => (
+              <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => paginate(index + 1)}>
+                  {index + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

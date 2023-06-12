@@ -3,13 +3,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import Table from "react-bootstrap/Table";
+import '../style.css';
 const Category = () => {
-  // const { data } = useDemoData({
-  //   dataSet: 'Commodity',
-  //   rowLength: 100,
-  //   maxColumns: 8,
-  // });
-
   const [category, setCategory] = useState("");
   const [data, setData] = useState([]);
   const handleChange = (e) => {
