@@ -3,7 +3,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './styled.css';
-
+import { Container } from 'react-bootstrap';
 const Product = () => {
   const [data, setData] = useState([]);
 
@@ -55,6 +55,12 @@ const Product = () => {
 
   return (
     <div className="main__content">
+       <Container fluid className="mb-5 py-3 shadow-lg">
+          <div className="d-flex justify-content-between align-items-center cursor-pointer ">
+            <h5>ADMIN</h5>
+            <img src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png" className="image_avatar" />
+          </div>
+      </Container>
       <h3 className='text-center mt-4'>उत्पादन थप्नुहोस्</h3>
       <div className="create">
         <button>

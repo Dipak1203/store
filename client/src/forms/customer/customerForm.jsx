@@ -1,9 +1,15 @@
 import '../style.css'
 import { NavLink } from "react-router-dom";
-
+import { Container } from 'react-bootstrap';
 const CustomerForm = () => {
   return (
     <div className="product">
+      <Container fluid className="mb-5 py-3 shadow-lg">
+          <div className="d-flex justify-content-between align-items-center cursor-pointer ">
+            <h5>ADMIN</h5>
+            <img src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png" className="image_avatar" />
+          </div>
+      </Container>
       <form>
         <div className='name'>
           <div className='name2'>

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import "../style.css";
-
+import { Container } from "react-bootstrap";
 const Wada = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -91,6 +91,12 @@ const Wada = () => {
 
   return (
     <div className="main__content">
+        <Container fluid className="mb-5 py-3 shadow-lg">
+          <div className="d-flex justify-content-between align-items-center cursor-pointer ">
+            <h5>ADMIN</h5>
+            <img src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png" className="image_avatar" />
+          </div>
+      </Container>
       <h1 className="text-center"> नयाँ वडा थप्नुहोस् </h1>
       <div className="create">
         <input
