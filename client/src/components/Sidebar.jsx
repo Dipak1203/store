@@ -66,12 +66,12 @@ const Sidebar = () => {
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
               <GroupAddIcon />
-              <NavLink to="/product">उत्पादन</NavLink>
+              <NavLink to="/product">सर समान</NavLink>
             </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            {/* <li style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
               <PostAddIcon />
               <NavLink to="/post">पोस्ट</NavLink>
-            </li>
+            </li> */}
           </>
         )}
         {/* <li style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>

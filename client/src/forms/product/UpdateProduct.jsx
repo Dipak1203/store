@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate, NavLink } from "react-router-dom";
 const UpdateProduct = () => {
   const [wada, setWada] = useState([]);
   const [branch, setBranch] = useState([]);
@@ -19,7 +19,7 @@ const UpdateProduct = () => {
     status: "",
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const wadaAPI = "http://localhost:8000/wada";
   const categoryAPI = "http://localhost:8000/category";
@@ -42,7 +42,7 @@ const UpdateProduct = () => {
     );
     if (res) {
       alert("सर समान उप्डेट");
-      navigate('/product')
+      navigate("/product");
     }
   };
 
@@ -56,15 +56,15 @@ const UpdateProduct = () => {
     setBranch(resBranch.data);
   };
 
-  const fetchSingleData = async() =>{
-        const res = await axios.get(`http://localhost:8000/product/get/${id}`);
-        const data = res.data.result[0];
-        setInput(data)
-  }
-  
+  const fetchSingleData = async () => {
+    const res = await axios.get(`http://localhost:8000/product/get/${id}`);
+    const data = res.data.result[0];
+    setInput(data);
+  };
+
   useEffect(() => {
     fetchData(wadaAPI, categoryAPI, branchAPI);
-    fetchSingleData()
+    fetchSingleData();
   }, []);
   return (
     <div className="main__content">
@@ -170,9 +170,12 @@ const UpdateProduct = () => {
               <label>द्राफ्त </label>
             </div>
 
-            <button type="submit" onClick={handleUpdate}>
-              पेश गर्नुहोस
-            </button>
+            <div className="d-flex justify-content-center mt-4 gap-5">
+              <button onClick={handleUpdate}> पेश गर्नुहोस</button>
+              <NavLink to="/product">
+                <button>Back</button>
+              </NavLink>
+            </div>
           </div>
         </form>
       </div>

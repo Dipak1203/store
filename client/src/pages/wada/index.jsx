@@ -1,21 +1,15 @@
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
+
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import Table from 'react-bootstrap/Table';
+
 const Wada = () => {
-  // const { data } = useDemoData({
-  //   dataSet: 'Commodity',
-  //   rowLength: 100,
-  //   maxColumns: 8,
-  // });
-
-
   const [data, setData] = useState([])
   const [wada, setWada] = useState('');
   const [updateWada, setUpdateWada] = useState('');
-  const [editMode, setEditMode] = useState(false);
+  const [editMode] = useState(false);
   const handleChange = (e) => {
     setWada(e.target.value);
     setUpdateWada(e.target.value)
@@ -103,13 +97,15 @@ const Wada = () => {
       </div>
 
       <div style={{ height: 400, width: '100', marginTop: '20px' }}>
-
-        <table border='1px'>
-          <tr className='p-5'>
-            <th>ID</th>
-            <th>wada</th>
-            <th colSpan="2">Action</th>
-          </tr>
+      <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Wada</th>
+          <th colSpan={2}>Action</th>
+        </tr>
+      </thead>
+      <tbody>
           {
             data.map(({ id, wada },index) => {
               const num = index+ 1;
@@ -117,15 +113,16 @@ const Wada = () => {
                 <tr key={id}>
                   <td>{num}</td>
                   <td>{wada}</td>
-                  <td><NavLink to={`/wada/update/${id}`}>Edit</NavLink></td>
+                  <td><NavLink to={`/wada/update/${id}`}><button>Edit</button></NavLink></td>
                   <td><button onClick={() => handleDelete(id,wada)}>Delete</button></td>
                 </tr>
 
               )
             })
           }
+      </tbody>
+      </Table>
 
-        </table>
       </div>
     </div>
   )

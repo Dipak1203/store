@@ -32,3 +32,11 @@
     margin-left: 200px;
     margin-top: 40px;
 }
+
+.image_avatar{
+    width: 4%;
+}
+
+.cursor-pointer h5,img{
+    cursor: pointer;
+}

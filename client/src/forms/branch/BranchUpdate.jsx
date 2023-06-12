@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams,useNavigate} from "react-router-dom";
+import { useParams, useNavigate, NavLink } from "react-router-dom";
 
 const BranchUpdate = () => {
   const [data, setData] = useState("");
   const [updateBranch, setUpdateBranch] = useState("");
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -25,14 +25,14 @@ const BranchUpdate = () => {
   }, []);
 
   const handleUpdate = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const res = await axios.put(`http://localhost:8000/branch/edit/${id}`, {
         updateBranch: updateBranch,
       });
-      if(res){
+      if (res) {
         // alert("Updated success");
-        navigate('/branch')
+        navigate("/branch");
       }
     } catch (error) {
       console.log(error);
@@ -47,7 +47,12 @@ const BranchUpdate = () => {
         value={updateBranch}
         onChange={(e) => setUpdateBranch(e.target.value)}
       />
-      <button onClick={handleUpdate}>Update</button>
+      <div className="d-flex justify-content-center mt-4 gap-5">
+        <button onClick={handleUpdate}>Update</button>
+        <NavLink to="/branch">
+          <button>Back</button>
+        </NavLink>
+      </div>
     </div>
   );
 };

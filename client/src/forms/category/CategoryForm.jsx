@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams,useNavigate} from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
 const CategoryUpdate = () => {
   const [data, setData] = useState("");
   const [updateCategory, setUpdatCategory] = useState("");
@@ -47,7 +47,12 @@ const CategoryUpdate = () => {
         value={updateCategory}
         onChange={(e) => setUpdatCategory(e.target.value)}
       />
-      <button onClick={handleUpdate}>Update</button>
+     <div className="d-flex justify-content-center mt-4 gap-5">
+        <button onClick={handleUpdate}>Update</button>
+        <NavLink to="/branch">
+          <button>Back</button>
+        </NavLink>
+      </div>
     </div>
   );
 };
